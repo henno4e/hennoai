@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Henno AI — AI Automation for Small Businesses</title>
+    <meta name="description" content="I help small businesses save 10-20 hours per week by automating the work they hate. Free audit available. Based in Cape Town, working with businesses across South Africa.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #08080a;
+            --bg-elevated: #0e0e12;
+            --bg-card: #111114;
+            --bg-card-hover: #17171c;
+            --border: #1a1a22;
+            --border-hover: #28283a;
+            --text: #eeeef0;
+            --text-muted: #8a8a96;
+            --text-dim: #4a4a58;
+            --accent: #4f8fff;
+            --accent-light: #38bdf8;
+            --accent-glow: rgba(79, 143, 255, 0.15);
+            --accent-soft: rgba(79, 143, 255, 0.06);
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--sans);
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Noise overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============================================
+           KEYFRAME ANIMATIONS
+           ============================================ */
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(36px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -50px) scale(1.06); }
+            66% { transform: translate(-30px, 25px) scale(0.94); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-50px, 35px) scale(0.94); }
+            66% { transform: translate(35px, -30px) scale(1.06); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -40px) scale(1.03); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* ============================================
+           SCROLL REVEAL SYSTEM
+           ============================================ */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 18px 0;
+            background: rgba(8, 8, 10, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: transform 0.4s var(--ease-out-quart), background 0.3s;
+        }
+
+        nav.hidden {
+            transform: translateY(-100%);
+        }
+
+        nav.scrolled {
+            background: rgba(8, 8, 10, 0.9);
+            border-bottom-color: var(--border);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: var(--sans);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .nav-logo span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-cta {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--bg);
+            background: var(--accent);
+            padding: 10px 24px;
+            border-radius: 8px;
+            transition: all 0.3s var(--ease-out-quart);
+            box-shadow: 0 0 20px rgba(79, 143, 255, 0.15);
+        }
+
+        .nav-cta:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: 0 0 30px rgba(79, 143, 255, 0.25);
+        }
+
+        /* ============================================
+           HERO
+           ============================================ */
+
+        .hero {
+            padding: 180px 0 130px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated gradient orbs */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            will-change: transform;
+        }
+
+        .hero-glow-1 {
+            width: 700px;
+            height: 700px;
+            top: -250px;
+            left: 50%;
+            margin-left: -350px;
+            background: radial-gradient(circle, rgba(79, 143, 255, 0.14), transparent 70%);
+            animation: float1 25s ease-in-out infinite;
+        }
+
+        .hero-glow-2 {
+            width: 500px;
+            height: 500px;
+            top: 50px;
+            right: -150px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.08), transparent 70%);
+            animation: float2 20s ease-in-out infinite;
+        }
+
+        .hero-glow-3 {
+            width: 400px;
+            height: 400px;
+            bottom: -50px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(79, 143, 255, 0.06), transparent 70%);
+            animation: float3 30s ease-in-out infinite;
+        }
+
+        /* Subtle grid pattern */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(ellipse 70% 50% at 50% 20%, black 20%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 20%, black 20%, transparent 70%);
+        }
+
+        /* Hero entrance stagger */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border: 1px solid rgba(79, 143, 255, 0.12);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+            background: rgba(17, 17, 20, 0.6);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 0.2s forwards;
+        }
+
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(46px, 7vw, 80px);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            margin-bottom: 28px;
+            max-width: 820px;
+            text-wrap: balance;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 0.4s forwards;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 65ch;
+            line-height: 1.7;
+            margin-bottom: 44px;
+            text-wrap: pretty;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 0.6s forwards;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 0.8s forwards;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 36px;
+            background: var(--accent);
+            color: var(--bg);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.35s var(--ease-out-quart);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 24px rgba(79, 143, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        .btn-primary .arrow {
+            display: inline-block;
+            transition: transform 0.35s var(--ease-out-quart);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            transition: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 40px rgba(79, 143, 255, 0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        .btn-primary:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .btn-primary:hover::after {
+            animation: shimmer 0.7s var(--ease-out-expo) forwards;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 36px;
+            background: transparent;
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.35s var(--ease-out-quart);
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            background: rgba(255,255,255,0.02);
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           STATS BAR
+           ============================================ */
+
+        .stats-bar {
+            padding: 64px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stats-grid > div {
+            position: relative;
+        }
+
+        /* Dividers between stats on desktop */
+        .stats-grid > div:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 48px;
+            background: linear-gradient(to bottom, transparent, var(--border-hover), transparent);
+        }
+
+        .stat-number {
+            font-family: var(--serif);
+            font-size: clamp(36px, 5vw, 48px);
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1;
+            text-shadow: 0 0 40px rgba(79, 143, 255, 0.1);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           SECTION STYLES
+           ============================================ */
+
+        section {
+            padding: 120px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(32px, 4.5vw, 52px);
+            font-weight: 400;
+            line-height: 1.12;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            max-width: 620px;
+            text-wrap: balance;
+        }
+
+        .section-desc {
+            font-size: 17px;
+            color: var(--text-muted);
+            max-width: 65ch;
+            line-height: 1.7;
+            margin-bottom: 64px;
+            text-wrap: pretty;
+        }
+
+        /* ============================================
+           TESTIMONIALS
+           ============================================ */
+
+        .testimonials {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+            align-items: start;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            background: var(--bg-card-hover);
+        }
+
+        .testimonial-quote {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 24px;
+            font-style: italic;
+            flex: 1;
+        }
+
+        .testimonial-quote::before {
+            content: '\201C';
+            font-family: var(--serif);
+            font-size: 48px;
+            color: var(--accent);
+            opacity: 0.4;
+            line-height: 0;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .testimonial-role {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .testimonial-stars {
+            color: #f59e0b;
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-source {
+            color: var(--text-muted);
+            font-size: 13px;
+            letter-spacing: 0;
+            margin-left: 8px;
+        }
+
+        .testimonial-result {
+            display: inline-block;
+            background: var(--accent-soft);
+            border: 1px solid rgba(79, 143, 255, 0.12);
+            color: var(--accent-light);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 16px;
+            align-self: flex-start;
+        }
+
+        @media (max-width: 768px) {
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           PROBLEM SECTION
+           ============================================ */
+
+        .problems {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .problem-card {
+            padding: 36px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg-card);
+            transition: all 0.4s var(--ease-out-quart);
+        }
+
+        .problem-card:hover {
+            border-color: rgba(79, 143, 255, 0.15);
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(79, 143, 255, 0.06);
+        }
+
+        .problem-icon {
+            font-size: 28px;
+            margin-bottom: 18px;
+            display: inline-block;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .problem-card:hover .problem-icon {
+            transform: scale(1.15);
+        }
+
+        .problem-card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.2px;
+        }
+
+        .problem-card p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ============================================
+           PROCESS SECTION
+           ============================================ */
+
+        .process {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .process-step {
+            padding: 44px 32px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg-card);
+            position: relative;
+            transition: all 0.4s var(--ease-out-quart);
+            overflow: hidden;
+        }
+
+        /* Subtle top accent line - hidden by default, appears on hover */
+        .process-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .process-step:hover {
+            border-color: rgba(79, 143, 255, 0.15);
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(79, 143, 255, 0.06);
+        }
+
+        .process-step:hover::before {
+            opacity: 1;
+        }
+
+        .step-number {
+            font-family: var(--serif);
+            font-size: 52px;
+            color: var(--accent);
+            opacity: 0.2;
+            margin-bottom: 24px;
+            line-height: 1;
+        }
+
+        .process-step h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.2px;
+        }
+
+        .step-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(79, 143, 255, 0.1);
+        }
+
+        .process-step p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           SERVICES SECTION
+           ============================================ */
+
+        .services {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .service-item {
+            padding: 24px 28px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--bg-card);
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.35s var(--ease-out-quart);
+        }
+
+        .service-item:hover {
+            border-color: rgba(79, 143, 255, 0.15);
+            background: var(--bg-card-hover);
+            transform: translateX(4px);
+        }
+
+        .service-item .check {
+            color: var(--accent);
+            font-size: 15px;
+            flex-shrink: 0;
+            font-weight: 700;
+            transition: transform 0.35s var(--ease-out-expo);
+        }
+
+        .service-item:hover .check {
+            transform: scale(1.3);
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+
+        .about {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 64px;
+            align-items: start;
+        }
+
+        .about-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+            transition: border-color 0.4s;
+        }
+
+        .about-image:hover {
+            border-color: var(--border-hover);
+        }
+
+        /* Decorative corner accent */
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 60px;
+            height: 60px;
+            border-top: 2px solid var(--accent);
+            border-left: 2px solid var(--accent);
+            border-radius: 20px 0 0 0;
+            opacity: 0.4;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-image .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+        }
+
+        .about-text h3 {
+            font-family: var(--serif);
+            font-size: 36px;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .about-text p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 16px;
+            text-wrap: pretty;
+        }
+
+        .about-text p strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .credibility-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 28px;
+        }
+
+        .cred-tag {
+            font-size: 13px;
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            transition: all 0.3s;
+        }
+
+        .cred-tag:hover {
+            border-color: var(--border-hover);
+            color: var(--text);
+        }
+
+        /* ============================================
+           FAQ SECTION
+           ============================================ */
+
+        .faq {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-list {
+            max-width: 700px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-question {
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 28px 0;
+            transition: color 0.3s;
+            letter-spacing: -0.2px;
+        }
+
+        .faq-question:hover {
+            color: var(--accent);
+        }
+
+        .faq-toggle {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s var(--ease-out-quart);
+            background: transparent;
+        }
+
+        .faq-toggle svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--text-muted);
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.4s var(--ease-out-quart);
+        }
+
+        .faq-item.open .faq-toggle {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .faq-item.open .faq-toggle svg {
+            transform: rotate(45deg);
+            stroke: var(--accent);
+        }
+
+        .faq-answer {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            text-wrap: pretty;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease-out-quart), padding-bottom 0.5s var(--ease-out-quart);
+            padding-bottom: 0;
+        }
+
+        .faq-item.open .faq-answer {
+            padding-bottom: 28px;
+        }
+
+        /* ============================================
+           FINAL CTA SECTION
+           ============================================ */
+
+        .final-cta {
+            padding: 140px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient glow */
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(79, 143, 255, 0.08) 0%, transparent 65%);
+            filter: blur(40px);
+            pointer-events: none;
+        }
+
+        .final-cta .section-title {
+            margin: 0 auto 16px;
+            max-width: 500px;
+        }
+
+        .final-cta .section-desc {
+            margin: 0 auto 48px;
+            text-align: center;
+        }
+
+        .final-cta .hero-ctas {
+            justify-content: center;
+            opacity: 1;
+            animation: none;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+
+        footer {
+            padding: 44px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-dim);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: var(--text-muted);
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s var(--ease-out-quart);
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+            opacity: 1;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 140px 0 90px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+
+            .stats-grid > div:not(:last-child)::after {
+                display: none;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-image {
+                max-width: 280px;
+                aspect-ratio: 1;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .final-cta {
+                padding: 100px 0;
+            }
+
+            footer .container {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                padding: 14px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav -->
+    <nav>
+        <div class="container">
+            <a href="/" class="nav-logo">henno<span>.ai</span></a>
+            <a href="#book" class="nav-cta">Book Free Audit</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-glow hero-glow-1"></div>
+            <div class="hero-glow hero-glow-2"></div>
+            <div class="hero-glow hero-glow-3"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="container">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Currently taking on new clients in Cape Town
+            </div>
+            <h1>What would you do with <em>20 extra hours</em> a week?</h1>
+            <p class="hero-sub">I audit your operations, find the repetitive work dragging your team down, and build custom AI systems that handle it on autopilot — so you can focus on growing your business.</p>
+            <div class="hero-ctas">
+                <a href="#book" class="btn-primary">Book Your Free Audit <span class="arrow">&rarr;</span></a>
+                <a href="#how" class="btn-secondary">See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-bar reveal">
+        <div class="container">
+            <div class="stats-grid">
+                <div>
+                    <div class="stat-number" data-count="10" data-suffix="+">10+</div>
+                    <div class="stat-label">Years building automation systems</div>
+                </div>
+                <div>
+                    <div class="stat-number" data-value="10-20">10-20</div>
+                    <div class="stat-label">Hours saved per week, per business</div>
+                </div>
+                <div>
+                    <div class="stat-number" data-count="100" data-suffix="+">100+</div>
+                    <div class="stat-label">Automations built and deployed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-label reveal">Results</div>
+            <h2 class="section-title reveal">Don't take my word for it</h2>
+            <div class="testimonial-grid stagger-children">
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-quote">I was spending hours every week pulling data out of supplier invoices by hand just to keep track of my costs. Henno built me an invoice extractor that does it all automatically — I just upload the PDF and the numbers land in my spreadsheet. It's saved me a massive headache and I actually know my margins now.</div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SK</div>
+                        <div>
+                            <div class="testimonial-name">Smartkitchenco</div>
+                            <div class="testimonial-role">Dark kitchen operator, Johannesburg</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-result">Hours of manual data entry eliminated</div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="testimonial-quote">The result of the work performed by Henno speaks for itself. The difference in our overall optimization, the tools we use and our ability to remain optimized through the automation strategies provided have been exceptional. Will be using Henno on future projects.</div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">BC</div>
+                        <div>
+                            <div class="testimonial-name">Braaiculture.com</div>
+                            <div class="testimonial-role">SEO &amp; Automation Project, 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-result">Full SEO &amp; automation overhaul</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="problems">
+        <div class="container">
+            <div class="section-label reveal">Sound Familiar?</div>
+            <h2 class="section-title reveal">You're spending your day on work that doesn't grow your business</h2>
+            <p class="section-desc reveal">Most business owners lose hours every day on tasks that follow the same pattern over and over. Here's what that usually looks like.</p>
+            <div class="problem-grid stagger-children">
+                <div class="problem-card reveal">
+                    <div class="problem-icon">&#x1F4EC;</div>
+                    <h3>Answering the same emails and messages</h3>
+                    <p>Your inbox is full of questions you've answered a hundred times. Every reply takes a few minutes, but they add up to hours.</p>
+                </div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">&#x1F4CB;</div>
+                    <h3>Chasing follow-ups and reminders</h3>
+                    <p>Leads slip through the cracks, invoices go unsent, and clients don't hear back because nobody had time to follow up.</p>
+                </div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">&#x1F504;</div>
+                    <h3>Moving data between systems</h3>
+                    <p>Copy-pasting from your CRM to a spreadsheet to an email. Manually updating records across three different platforms.</p>
+                </div>
+                <div class="problem-card reveal">
+                    <div class="problem-icon">&#x1F4C5;</div>
+                    <h3>Scheduling and coordination</h3>
+                    <p>Back-and-forth booking, rescheduling, sending reminders, coordinating your team's calendar. All of it manual.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process" id="how">
+        <div class="container">
+            <div class="section-label reveal">How It Works</div>
+            <h2 class="section-title reveal">From manual to autopilot in three steps</h2>
+            <p class="section-desc reveal">No complex proposals. No six-month timelines. Just a clear process that gets you results fast.</p>
+            <div class="process-steps stagger-children">
+                <div class="process-step reveal">
+                    <div class="step-number">01</div>
+                    <span class="step-tag">Free</span>
+                    <h3>The Audit</h3>
+                    <p>A 30-minute call where I dig into your daily operations and identify 2-3 quick wins where automation could save you real time and money. You'll walk away with actionable insights, whether we work together or not.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="step-number">02</div>
+                    <span class="step-tag">Full Day</span>
+                    <h3>The Shadow Day</h3>
+                    <p>I spend a full day in your business, watching how things actually work. No assumptions, no guesswork. You get a complete automation blueprint that maps out every opportunity to save time and money.</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="step-number">03</div>
+                    <span class="step-tag">Done For You</span>
+                    <h3>The Build</h3>
+                    <p>I implement everything from the blueprint. Custom AI agents, automated workflows, smart systems that handle the work your team is doing manually. You focus on growing your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services">
+        <div class="container">
+            <div class="section-label reveal">What I Automate</div>
+            <h2 class="section-title reveal">If it follows a pattern, it can be automated</h2>
+            <p class="section-desc reveal">Here are some of the most common things I build for small businesses. If you don't see yours, ask. Chances are I can help.</p>
+            <div class="services-grid stagger-children">
+                <div class="service-item reveal"><span class="check">&check;</span> Client follow-ups</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Lead qualification</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Booking and scheduling</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Invoice generation</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Email and message replies</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Data entry and syncing</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Review management</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Report generation</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Customer onboarding</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Social media posting</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Quote and proposal creation</div>
+                <div class="service-item reveal"><span class="check">&check;</span> Team notifications</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image reveal">
+                    <div class="placeholder">[ Your photo here ]</div>
+                </div>
+                <div class="about-text">
+                    <div class="section-label reveal">About</div>
+                    <h3 class="reveal">Hey, I'm Henno</h3>
+                    <p class="reveal">I've spent over a decade in tech, the last few years focused entirely on AI and automation for small businesses. I've seen what works, what doesn't, and where the real time savings are hiding.</p>
+                    <p class="reveal">Now I focus on one thing: <strong>helping small business owners stop doing work that machines should be doing.</strong> I combine AI, automation, and a deep understanding of how businesses actually operate to build systems that save real time and real money.</p>
+                    <p class="reveal">I'm based in Cape Town and work hands-on with local businesses. I don't send you a PDF and disappear. I embed myself in your operations, find the bottlenecks, and build the solution.</p>
+                    <div class="credibility-tags reveal">
+                        <span class="cred-tag">10+ years in tech</span>
+                        <span class="cred-tag">100+ automations built</span>
+                        <span class="cred-tag">Cape Town based</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-label reveal">Questions</div>
+            <h2 class="section-title reveal">Things people usually ask</h2>
+            <div class="faq-list">
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>Do I need to be technical?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">Not at all. I handle everything on the technical side. You just tell me how your business works and what's eating up your time. I build systems that are simple for you and your team to use.</div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>What does the Shadow Day involve?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">I spend a full working day at your business, observing your team's workflows, asking questions, and mapping out every process that could be automated. At the end, you get a detailed blueprint document that lays out exactly what to automate, how it would work, and the time and cost savings you'd see.</div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>How much does it cost?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">The audit call is completely free. The Shadow Day and implementation depend on the size and complexity of your business — I'll give you a clear quote after the audit once I understand your situation. No surprises. Most clients see a return on their investment within the first month.</div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>How long until I see results?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">Most automations go live within 2-4 weeks of starting the build. Some quick wins from the audit can be implemented even sooner. You start saving time from day one.</div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>What if I already use software like Xero, HubSpot, or Google Workspace?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">Great, that makes things easier. The automations I build connect to the tools you already use. I'm not replacing your existing systems, I'm making them work together so things happen automatically instead of manually.</div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+                        <span>Do you offer ongoing support?</span>
+                        <span class="faq-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12"/><line x1="0" y1="6" x2="12" y2="6"/></svg></span>
+                    </div>
+                    <div class="faq-answer">Yes. After the build, I offer monthly retainer packages for ongoing optimization, monitoring, and building new automations as your business evolves. But there's no lock-in. Everything I build, you own.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="book">
+        <div class="container">
+            <div class="section-label reveal">Next Step</div>
+            <h2 class="section-title reveal">Ready to get your time back?</h2>
+            <p class="section-desc reveal">Book a free 30-minute audit. You'll walk away knowing exactly where you're losing hours and how to fix it. No pitch, no pressure — just actionable insights you can use immediately.</p>
+            <div class="hero-ctas reveal">
+                <a href="https://cal.com/henno-4e/30min" class="btn-primary" target="_blank">Book Your Free Audit <span class="arrow">&rarr;</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-text">&copy; 2026 Henno AI. Cape Town, South Africa.</div>
+            <div class="footer-links">
+                <a href="https://linkedin.com/in/hennofourie" target="_blank">LinkedIn</a>
+                <a href="https://x.com/hennofourie" target="_blank">X / Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ============================================
+           SCROLL REVEAL WITH STAGGER
+           ============================================ */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        // Add stagger delays to children
+        document.querySelectorAll('.stagger-children').forEach(parent => {
+            const children = parent.querySelectorAll('.reveal');
+            children.forEach((child, i) => {
+                child.style.transitionDelay = `${i * 0.07}s`;
+            });
+        });
+
+        // Observe all reveal elements
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        /* ============================================
+           STAT COUNTER ANIMATION
+           ============================================ */
+        let statsCounted = false;
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsCounted) {
+                    statsCounted = true;
+                    animateStats();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const statsBar = document.querySelector('.stats-bar');
+        if (statsBar) statsObserver.observe(statsBar);
+
+        function animateStats() {
+            // Small delay so the fade-in reveal completes before counting starts
+            setTimeout(() => {
+                document.querySelectorAll('[data-count]').forEach(el => {
+                    const target = parseInt(el.dataset.count);
+                    const suffix = el.dataset.suffix || '';
+                    const duration = 1800;
+
+                    el.textContent = '0' + suffix;
+                    const start = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = Math.round(eased * target);
+                        el.textContent = current + suffix;
+                        if (progress < 1) requestAnimationFrame(update);
+                    }
+
+                    requestAnimationFrame(update);
+                });
+            }, 400);
+        }
+
+        /* ============================================
+           NAV SCROLL BEHAVIOR
+           ============================================ */
+        const nav = document.querySelector('nav');
+        let lastScrollY = 0;
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
+
+                    // Add/remove scrolled class for background opacity
+                    if (currentScrollY > 50) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+
+                    // Hide/show on scroll direction
+                    if (currentScrollY > lastScrollY && currentScrollY > 200) {
+                        nav.classList.add('hidden');
+                    } else {
+                        nav.classList.remove('hidden');
+                    }
+
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        /* ============================================
+           FAQ ACCORDION
+           ============================================ */
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const isOpen = item.classList.contains('open');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    const a = i.querySelector('.faq-answer');
+                    a.style.maxHeight = null;
+                    i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                });
+
+                // Toggle clicked
+                if (!isOpen) {
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    question.setAttribute('aria-expanded', 'true');
+                }
+            });
+
+            // Keyboard accessibility
+            question.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    question.click();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
