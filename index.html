@@ -1778,5 +1778,551 @@
         });
     </script>
 
+<!-- Chat Widget -->
+<style>
+    .chat-bubble {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 4px 24px rgba(79, 143, 255, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9998;
+        transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+        border: none;
+    }
+    .chat-bubble:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 32px rgba(79, 143, 255, 0.45);
+    }
+    .chat-bubble svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
+    .chat-bubble.open svg.icon-chat { display: none; }
+    .chat-bubble:not(.open) svg.icon-close { display: none; }
+
+    .chat-tooltip {
+        position: fixed;
+        bottom: 88px;
+        right: 24px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        z-index: 9998;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.4s, transform 0.4s var(--ease-out-expo);
+        pointer-events: none;
+    }
+    .chat-tooltip.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    .chat-panel {
+        position: fixed;
+        bottom: 96px;
+        right: 24px;
+        width: 380px;
+        height: 520px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        z-index: 9998;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+        pointer-events: none;
+        transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+    }
+    .chat-panel.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+
+    .chat-panel-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .chat-panel-header .chat-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: white;
+    }
+    .chat-panel-header .chat-header-text {
+        flex: 1;
+    }
+    .chat-panel-header .chat-header-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+    .chat-panel-header .chat-header-status {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .chat-msg {
+        max-width: 85%;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+    .chat-msg.assistant {
+        align-self: flex-start;
+        background: var(--bg-card);
+        color: var(--text);
+        border-bottom-left-radius: 4px;
+    }
+    .chat-msg.user {
+        align-self: flex-end;
+        background: var(--accent);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .chat-slots {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 4px 0;
+        align-self: flex-start;
+    }
+    .chat-slot-pill {
+        padding: 6px 14px;
+        border-radius: 20px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+        font-family: var(--sans);
+    }
+    .chat-slot-pill:hover {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+
+    .chat-booked-card {
+        align-self: flex-start;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        max-width: 85%;
+    }
+    .chat-booked-card .booked-check {
+        color: #22c55e;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .chat-booked-card .booked-title {
+        font-size: 0.875rem;
+        color: var(--text);
+        font-weight: 500;
+    }
+    .chat-booked-card .booked-time {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+    .chat-booked-card .booked-note {
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        margin-top: 8px;
+    }
+
+    .chat-typing {
+        align-self: flex-start;
+        padding: 10px 14px;
+        background: var(--bg-card);
+        border-radius: 14px;
+        border-bottom-left-radius: 4px;
+        display: none;
+    }
+    .chat-typing.visible { display: flex; gap: 4px; }
+    .chat-typing span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--text-dim);
+        animation: chatTypingDot 1.4s infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes chatTypingDot {
+        0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+        30% { opacity: 1; transform: scale(1); }
+    }
+
+    .chat-input-bar {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 8px;
+    }
+    .chat-input-bar input {
+        flex: 1;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: var(--text);
+        font-size: 0.875rem;
+        font-family: var(--sans);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .chat-input-bar input:focus {
+        border-color: var(--accent);
+    }
+    .chat-input-bar input::placeholder {
+        color: var(--text-dim);
+    }
+    .chat-input-bar button {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: var(--accent);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s;
+    }
+    .chat-input-bar button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    .chat-input-bar button svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+    }
+
+    @media (max-width: 480px) {
+        .chat-panel {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 90vh;
+            border-radius: 16px 16px 0 0;
+        }
+        .chat-bubble {
+            bottom: 16px;
+            right: 16px;
+        }
+        .chat-tooltip {
+            bottom: 80px;
+            right: 16px;
+        }
+    }
+</style>
+
+<div class="chat-tooltip" id="chatTooltip">Have questions? I can help.</div>
+
+<button class="chat-bubble" id="chatBubble" aria-label="Open chat">
+    <svg class="icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-panel-header">
+        <div class="chat-avatar">H</div>
+        <div class="chat-header-text">
+            <div class="chat-header-title">Henno's AI Assistant</div>
+            <div class="chat-header-status">Online</div>
+        </div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg assistant">Hi! I'm Henno's AI assistant. I can answer questions about our automation services or help you book a free 30-minute audit call. What brings you here?</div>
+        <div class="chat-typing" id="chatTyping"><span></span><span></span><span></span></div>
+    </div>
+    <div class="chat-input-bar">
+        <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" />
+        <button id="chatSend" aria-label="Send message">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+    </div>
+</div>
+
+<script>
+(function() {
+    var CHAT_API_URL = 'https://henno-chatbot.YOUR_SUBDOMAIN.workers.dev'; // TODO: Replace after deploy
+    var CALCOM_FALLBACK = 'https://cal.com/henno-4e/30min';
+
+    var bubble = document.getElementById('chatBubble');
+    var panel = document.getElementById('chatPanel');
+    var messagesEl = document.getElementById('chatMessages');
+    var input = document.getElementById('chatInput');
+    var sendBtn = document.getElementById('chatSend');
+    var typingEl = document.getElementById('chatTyping');
+    var tooltip = document.getElementById('chatTooltip');
+
+    var isOpen = false;
+    var isStreaming = false;
+    var sessionId = localStorage.getItem('henno_chat_session') || null;
+    var historyLoaded = false;
+
+    // Proactive tooltip (15s delay, once per session)
+    if (!sessionStorage.getItem('henno_chat_tooltip_shown')) {
+        setTimeout(function() {
+            if (!isOpen) {
+                tooltip.classList.add('visible');
+                sessionStorage.setItem('henno_chat_tooltip_shown', '1');
+                tooltip.addEventListener('click', function() {
+                    tooltip.classList.remove('visible');
+                    toggleChat();
+                });
+            }
+        }, 15000);
+    }
+
+    bubble.addEventListener('click', toggleChat);
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    function toggleChat() {
+        isOpen = !isOpen;
+        panel.classList.toggle('open', isOpen);
+        bubble.classList.toggle('open', isOpen);
+        tooltip.classList.remove('visible');
+
+        if (isOpen && !historyLoaded) {
+            loadHistory();
+            historyLoaded = true;
+        }
+
+        if (isOpen) {
+            input.focus();
+        }
+    }
+
+    function loadHistory() {
+        if (!sessionId) return;
+        fetch(CHAT_API_URL + '/api/history?sessionId=' + encodeURIComponent(sessionId))
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.messages && data.messages.length > 0) {
+                    // Clear default greeting
+                    var defaultMsg = messagesEl.querySelector('.chat-msg.assistant');
+                    if (defaultMsg) defaultMsg.remove();
+
+                    data.messages.forEach(function(m) {
+                        appendMessage(m.role === 'user' ? 'user' : 'assistant', m.content);
+                    });
+                }
+            })
+            .catch(function() {
+                // Silently fail — default greeting stays
+            });
+    }
+
+    function sendMessage() {
+        var text = input.value.trim();
+        if (!text || isStreaming) return;
+
+        input.value = '';
+        appendMessage('user', text);
+        setStreaming(true);
+
+        if (!sessionId) {
+            sessionId = crypto.randomUUID();
+            localStorage.setItem('henno_chat_session', sessionId);
+        }
+
+        fetch(CHAT_API_URL + '/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: sessionId, message: text }),
+        })
+        .then(function(res) {
+            // Check for new session ID from server
+            var newSessionId = res.headers.get('X-Session-Id');
+            if (newSessionId && newSessionId !== sessionId) {
+                sessionId = newSessionId;
+                localStorage.setItem('henno_chat_session', sessionId);
+            }
+
+            if (!res.ok) {
+                throw new Error('API error: ' + res.status);
+            }
+
+            var reader = res.body.getReader();
+            var decoder = new TextDecoder();
+            var currentAssistantMsg = null;
+            var buffer = '';
+
+            function processStream() {
+                return reader.read().then(function(result) {
+                    if (result.done) {
+                        setStreaming(false);
+                        return;
+                    }
+
+                    buffer += decoder.decode(result.value, { stream: true });
+                    var lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.indexOf('data: ') !== 0) continue;
+                        var jsonStr = line.slice(6);
+                        if (!jsonStr) continue;
+
+                        var event;
+                        try {
+                            event = JSON.parse(jsonStr);
+                        } catch(e) { continue; }
+
+                        if (event.type === 'chunk') {
+                            if (!currentAssistantMsg) {
+                                currentAssistantMsg = appendMessage('assistant', '');
+                            }
+                            currentAssistantMsg.textContent += event.text;
+                            scrollToBottom();
+                        } else if (event.type === 'slots') {
+                            renderSlots(event.slots);
+                        } else if (event.type === 'booked') {
+                            renderBookedCard(event);
+                        } else if (event.type === 'error') {
+                            var msg = event.message || 'Something went wrong.';
+                            appendMessage('assistant', msg + ' Book directly: ' + (event.fallbackUrl || CALCOM_FALLBACK));
+                        } else if (event.type === 'done') {
+                            currentAssistantMsg = null;
+                        }
+                    }
+
+                    return processStream();
+                });
+            }
+
+            return processStream();
+        })
+        .catch(function() {
+            appendMessage('assistant', 'Chat is temporarily unavailable. You can book directly at: ' + CALCOM_FALLBACK);
+            setStreaming(false);
+        });
+    }
+
+    function appendMessage(role, text) {
+        var div = document.createElement('div');
+        div.className = 'chat-msg ' + role;
+        div.textContent = text;
+        messagesEl.insertBefore(div, typingEl);
+        scrollToBottom();
+        return div;
+    }
+
+    function renderSlots(slots) {
+        var container = document.createElement('div');
+        container.className = 'chat-slots';
+        slots.forEach(function(slot) {
+            var pill = document.createElement('button');
+            pill.className = 'chat-slot-pill';
+            var d = new Date(slot);
+            pill.textContent = d.toLocaleDateString('en-ZA', { weekday: 'short', month: 'short', day: 'numeric' })
+                + ' ' + d.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+            pill.addEventListener('click', function() {
+                input.value = pill.textContent;
+                sendMessage();
+            });
+            container.appendChild(pill);
+        });
+        messagesEl.insertBefore(container, typingEl);
+        scrollToBottom();
+    }
+
+    function renderBookedCard(event) {
+        var card = document.createElement('div');
+        card.className = 'chat-booked-card';
+
+        var checkDiv = document.createElement('div');
+        checkDiv.className = 'booked-check';
+        checkDiv.textContent = '\u2713 You\'re booked!';
+        card.appendChild(checkDiv);
+
+        var titleDiv = document.createElement('div');
+        titleDiv.className = 'booked-title';
+        titleDiv.textContent = event.title || '30-min Free Audit';
+        card.appendChild(titleDiv);
+
+        var d = new Date(event.start);
+        var timeStr = d.toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+            + ' at ' + d.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+
+        var timeDiv = document.createElement('div');
+        timeDiv.className = 'booked-time';
+        timeDiv.textContent = timeStr;
+        card.appendChild(timeDiv);
+
+        var noteDiv = document.createElement('div');
+        noteDiv.className = 'booked-note';
+        noteDiv.textContent = 'Check your email for details.';
+        card.appendChild(noteDiv);
+
+        messagesEl.insertBefore(card, typingEl);
+        scrollToBottom();
+    }
+
+    function setStreaming(streaming) {
+        isStreaming = streaming;
+        sendBtn.disabled = streaming;
+        typingEl.classList.toggle('visible', streaming);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+})();
+</script>
+
 </body>
 </html>
