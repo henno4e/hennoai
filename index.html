@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,215 @@
             --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Light mode overrides */
+        [data-theme="light"] {
+            --bg: #f8f8fa;
+            --bg-elevated: #f0f0f4;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f5f5f8;
+            --border: #e2e2ea;
+            --border-hover: #c8c8d4;
+            --text: #1a1a2e;
+            --text-muted: #5a5a72;
+            --text-dim: #9a9ab0;
+            --accent: #2563eb;
+            --accent-light: #0ea5e9;
+            --accent-glow: rgba(37, 99, 235, 0.12);
+            --accent-soft: rgba(37, 99, 235, 0.06);
+        }
+
+        [data-theme="light"] body {
+            -webkit-font-smoothing: auto;
+            -moz-osx-font-smoothing: auto;
+        }
+
+        [data-theme="light"] body::before {
+            opacity: 0;
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(248, 248, 250, 0.8);
+            border-bottom-color: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] nav.scrolled {
+            background: rgba(248, 248, 250, 0.95);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="light"] .hero-badge {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--border);
+        }
+
+        [data-theme="light"] .hero-glow-1 {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.08), transparent 70%);
+        }
+
+        [data-theme="light"] .hero-glow-2 {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.06), transparent 70%);
+        }
+
+        [data-theme="light"] .hero-glow-3 {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.04), transparent 70%);
+        }
+
+        [data-theme="light"] .hero-grid {
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .hero h1 em {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-theme="light"] .nav-cta {
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .nav-cta:hover {
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        [data-theme="light"] .btn-primary {
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        [data-theme="light"] .btn-secondary {
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        [data-theme="light"] .btn-secondary:hover {
+            background: var(--bg-elevated);
+            border-color: var(--border-hover);
+        }
+
+        [data-theme="light"] .stat-number {
+            text-shadow: none;
+        }
+
+        [data-theme="light"] .stats-grid > div:not(:last-child)::after {
+            background: var(--border);
+        }
+
+        [data-theme="light"] .problem-card {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .problem-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .step-card {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .step-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .step-num {
+            color: var(--border);
+        }
+
+        [data-theme="light"] .testimonial-card {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="light"] .testimonial-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .testimonial-avatar {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+        }
+
+        [data-theme="light"] .service-item {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        [data-theme="light"] .service-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .about-photo {
+            border-color: var(--border);
+        }
+
+        [data-theme="light"] .cred-tag {
+            background: var(--bg-elevated);
+            border-color: var(--border);
+        }
+
+        [data-theme="light"] .faq-toggle svg line {
+            stroke: var(--text-muted);
+        }
+
+        [data-theme="light"] .final-cta {
+            background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+        }
+
+        [data-theme="light"] .nav-logo span {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s var(--ease-out-quart);
+            color: var(--text-muted);
+            padding: 0;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--border-hover);
+            color: var(--text);
+            background: var(--bg-card);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s var(--ease-out-quart);
+        }
+
+        .theme-toggle:hover svg {
+            transform: rotate(15deg);
+        }
+
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .icon-sun {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-toggle .icon-moon {
+            display: block;
         }
 
         * {
@@ -1149,7 +1358,13 @@
     <nav>
         <div class="container">
             <a href="/" class="nav-logo">henno<span>.ai</span></a>
-            <a href="#book" class="nav-cta">Book Free Audit</a>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                <a href="#book" class="nav-cta">Book Free Audit</a>
+            </div>
         </div>
     </nav>
 
@@ -1409,6 +1624,23 @@
     </footer>
 
     <script>
+        /* ============================================
+           THEME TOGGLE
+           ============================================ */
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = stored || (prefersDark ? 'dark' : 'dark');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
         /* ============================================
            SCROLL REVEAL WITH STAGGER
            ============================================ */

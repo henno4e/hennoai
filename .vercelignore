@@ -1,0 +1,6 @@
+*.png
+.claude/
+.playwright-mcp/
+docs/
+CLAUDE.md
+henno-ai-landing-page.html
