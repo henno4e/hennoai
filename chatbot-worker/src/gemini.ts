@@ -1,5 +1,5 @@
 import type { Env, GeminiContent, GeminiPart, GeminiResponse, SSEEvent } from "./types";
-import { SYSTEM_PROMPT, TOOL_DECLARATIONS } from "./prompt";
+import { getSystemPrompt, TOOL_DECLARATIONS } from "./prompt";
 import { getAvailableSlots, bookMeeting } from "./calcom";
 import { getServiceInfo } from "./services";
 
@@ -24,8 +24,16 @@ export async function generateChatResponse(
   while (toolCallCount <= MAX_TOOL_CALLS) {
     const geminiResponse = await callGemini(env.GEMINI_API_KEY, contents);
 
-    const parts = geminiResponse.candidates[0]?.content?.parts || [];
+    const modelContent = geminiResponse.candidates[0]?.content;
+    const parts = modelContent?.parts || [];
+
+    // Push full model response as-is (preserves thought_signature)
+    if (modelContent) {
+      contents.push(modelContent);
+    }
+
     let hasFunctionCall = false;
+    const functionResponses: GeminiPart[] = [];
 
     for (const part of parts) {
       if (part.text) {
@@ -44,30 +52,24 @@ export async function generateChatResponse(
           sendEvent
         );
 
-        // Add model's function call and our result to the conversation
-        contents.push({
-          role: "model",
-          parts: [{ functionCall: part.functionCall }],
-        });
-        contents.push({
-          role: "user",
-          parts: [
-            {
-              functionResponse: {
-                name: part.functionCall.name,
-                response: toolResult,
-              },
-            },
-          ],
+        functionResponses.push({
+          functionResponse: {
+            name: part.functionCall.name,
+            response: toolResult,
+          },
         });
       }
     }
 
-    if (!hasFunctionCall) {
-      break;
+    // Batch all function responses into one user message
+    if (functionResponses.length > 0) {
+      contents.push({
+        role: "user",
+        parts: functionResponses,
+      });
     }
 
-    if (toolCallCount >= MAX_TOOL_CALLS) {
+    if (!hasFunctionCall || toolCallCount >= MAX_TOOL_CALLS) {
       break;
     }
   }
@@ -85,7 +87,7 @@ async function callGemini(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       system_instruction: {
-        parts: [{ text: SYSTEM_PROMPT }],
+        parts: [{ text: getSystemPrompt() }],
       },
       contents,
       tools: [{ functionDeclarations: TOOL_DECLARATIONS }],

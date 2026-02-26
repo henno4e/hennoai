@@ -1,0 +1,11 @@
+name = "henno-chatbot"
+main = "src/index.ts"
+compatibility_date = "2025-02-25"
+
+[[kv_namespaces]]
+binding = "CHAT_SESSIONS"
+id = "73cec9baea8c42148b37b0a6895d33f2"
+
+[vars]
+ALLOWED_ORIGINS = "https://henno.ai,http://localhost:8080"
+CALCOM_EVENT_TYPE_ID = "4867177"
