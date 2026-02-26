@@ -150,7 +150,7 @@
                     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
-                <a href="#book" class="nav-cta">Book Free Audit</a>
+                <a href="#book" class="nav-cta" onclick="event.preventDefault();window.openHennoChat();">Book Free Audit</a>
             </div>
         </div>
     </nav>
@@ -172,7 +172,7 @@
             <h1>What would you do with <em>20 extra hours</em> a week?</h1>
             <p class="hero-sub">I audit your operations, find the repetitive work dragging your team down, and build custom AI systems that handle it on autopilot — so you can focus on growing your business.</p>
             <div class="hero-ctas">
-                <a href="#book" class="btn-primary">Book Your Free Audit <span class="arrow">&rarr;</span></a>
+                <a href="#book" class="btn-primary" onclick="event.preventDefault();window.openHennoChat();">Book Your Free Audit <span class="arrow">&rarr;</span></a>
                 <a href="#how" class="btn-secondary">See How It Works</a>
             </div>
         </div>
@@ -395,7 +395,7 @@
             <h2 class="section-title reveal">Ready to get your time back?</h2>
             <p class="section-desc reveal">Book a free 30-minute audit. You'll walk away knowing exactly where you're losing hours and how to fix it. No pitch, no pressure — just actionable insights you can use immediately.</p>
             <div class="hero-ctas reveal">
-                <a href="https://cal.com/henno-4e/30min" class="btn-primary" target="_blank">Book Your Free Audit <span class="arrow">&rarr;</span></a>
+                <a href="#book" class="btn-primary" onclick="event.preventDefault();window.openHennoChat();">Book Your Free Audit <span class="arrow">&rarr;</span></a>
             </div>
         </div>
     </section>
@@ -936,6 +936,13 @@
             input.focus();
         }
     }
+
+    function openChat() {
+        if (!isOpen) toggleChat();
+    }
+
+    // Let CTA buttons open the chat
+    window.openHennoChat = openChat;
 
     function loadHistory() {
         if (!sessionId) return;
