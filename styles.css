@@ -1689,6 +1689,61 @@ footer .container {
     color: var(--text);
 }
 
+.article-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.article-body thead {
+    background: var(--bg-card);
+}
+
+.article-body th {
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    letter-spacing: -0.1px;
+}
+
+.article-body td {
+    padding: 12px 20px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+}
+
+.article-body tr:last-child td {
+    border-bottom: none;
+}
+
+.article-body tbody tr:last-child td {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.article-body tbody tr:hover {
+    background: var(--bg-card);
+}
+
+@media (max-width: 768px) {
+    .article-body table {
+        font-size: 14px;
+    }
+
+    .article-body th,
+    .article-body td {
+        padding: 10px 14px;
+    }
+}
+
 .article-body hr {
     border: none;
     border-top: 1px solid var(--border);
