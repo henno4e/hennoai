@@ -6,7 +6,14 @@
     <description>AI automation insights and guides for small businesses. Learn how to save time, cut costs, and grow with practical automation strategies.</description>
     <language>en</language>
     <managingEditor>hello@henno.ai (Henno)</managingEditor>
-    <lastBuildDate>Wed, 25 Feb 2026 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 26 Feb 2026 00:00:00 +0200</lastBuildDate>
     <atom:link href="https://henno.ai/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI automation for real estate agencies: a practical guide to getting started</title>
+      <link>https://henno.ai/ai-automation-real-estate-agencies.html</link>
+      <guid isPermaLink="true">https://henno.ai/ai-automation-real-estate-agencies.html</guid>
+      <pubDate>Thu, 26 Feb 2026 00:00:00 +0200</pubDate>
+      <description>A practical guide to AI automation for real estate agencies. Which 5 workflows to automate first, what a connected AI stack costs in Rands, and how to go from zero to running in 4 weeks.</description>
+    </item>
   </channel>
 </rss>
