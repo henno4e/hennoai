@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style="color-scheme: light dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#f8f8fa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#08080a" media="(prefers-color-scheme: dark)">
+    <title>Blog — Henno AI | AI Automation Insights for Small Businesses</title>
+    <meta name="description" content="Practical guides on AI automation for small businesses. Learn how to save time, cut costs, and scale operations with automation strategies that actually work.">
+    <link rel="canonical" href="https://henno.ai/blog/">
+    <meta property="og:title" content="Blog — Henno AI">
+    <meta property="og:description" content="Practical guides on AI automation for small businesses. Learn how to save time, cut costs, and scale operations.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://henno.ai/blog/">
+    <meta property="og:site_name" content="Henno AI">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Blog — Henno AI">
+    <meta name="twitter:description" content="Practical guides on AI automation for small businesses.">
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="alternate" type="application/rss+xml" title="Henno AI Blog" href="/rss.xml">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Henno AI Blog",
+        "description": "Practical guides on AI automation for small businesses.",
+        "url": "https://henno.ai/blog/",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Henno AI",
+            "url": "https://henno.ai/"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Henno",
+            "url": "https://henno.ai/",
+            "sameAs": [
+                "https://www.linkedin.com/in/hennoai/",
+                "https://x.com/henno_4e"
+            ]
+        }
+    }
+    </script>
+</head>
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Nav -->
+    <nav>
+        <div class="container">
+            <a href="/" class="nav-logo">henno<span>.ai</span></a>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <a href="/blog/" class="nav-link">Blog</a>
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                <a href="/#book" class="nav-cta">Book Free Audit</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+        <div class="container">
+            <header class="blog-header">
+                <div class="section-label">Blog</div>
+                <h1>AI automation insights</h1>
+                <p>Practical guides on saving time, cutting costs, and scaling your business with AI automation.</p>
+            </header>
+
+            <!-- Blog posts will be listed here -->
+            <div class="blog-empty">
+                <p>Posts coming soon. In the meantime, <a href="/#book">book a free audit</a> to find out how automation can help your business.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-text">&copy; 2026 Henno AI. Cape Town, South Africa.</div>
+            <div class="footer-links">
+                <a href="/blog/">Blog</a>
+                <a href="https://www.linkedin.com/in/hennoai/" target="_blank">LinkedIn</a>
+                <a href="https://x.com/henno_4e" target="_blank">X / Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* Theme toggle */
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = stored || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
+        /* Nav scroll behavior */
+        const nav = document.querySelector('nav');
+        let lastScrollY = 0;
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
+                    if (currentScrollY > 50) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                    if (currentScrollY > lastScrollY && currentScrollY > 200) {
+                        nav.classList.add('hidden');
+                    } else {
+                        nav.classList.remove('hidden');
+                    }
+                    lastScrollY = currentScrollY;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    </script>
+
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>
