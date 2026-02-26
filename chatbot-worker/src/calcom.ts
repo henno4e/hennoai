@@ -33,15 +33,37 @@ export async function getAvailableSlots(
   }
 
   const data: CalcomSlotsResponse = await res.json();
-  const allSlots: string[] = [];
 
+  // Group slots by date, pick 1-2 per day to look realistically busy
+  const slotsByDate: Record<string, string[]> = {};
   for (const dateSlots of Object.values(data.data)) {
     for (const slot of dateSlots) {
-      allSlots.push(slot.start);
+      const date = slot.start.split("T")[0];
+      if (!slotsByDate[date]) slotsByDate[date] = [];
+      slotsByDate[date].push(slot.start);
     }
   }
 
-  return { slots: allSlots };
+  const curated: string[] = [];
+  for (const dateSlots of Object.values(slotsByDate)) {
+    if (dateSlots.length <= 2) {
+      curated.push(...dateSlots);
+    } else {
+      // Pick one morning and one afternoon slot
+      const morning = dateSlots.find((s) => {
+        const h = new Date(s).getHours();
+        return h >= 9 && h < 12;
+      });
+      const afternoon = dateSlots.find((s) => {
+        const h = new Date(s).getHours();
+        return h >= 12;
+      });
+      if (morning) curated.push(morning);
+      if (afternoon) curated.push(afternoon);
+    }
+  }
+
+  return { slots: curated.slice(0, 6) };
 }
 
 export async function bookMeeting(

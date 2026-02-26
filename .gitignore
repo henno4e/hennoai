@@ -4,3 +4,6 @@
 docs/
 CLAUDE.md
 henno-ai-landing-page.html
+.vercel
+chatbot-worker/.dev.vars
+chatbot-worker/node_modules/
