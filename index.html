@@ -697,6 +697,8 @@
         line-height: 1.5;
         word-wrap: break-word;
     }
+    .chat-msg p { margin: 0; }
+    .chat-msg p + p { margin-top: 8px; }
     .chat-msg.assistant {
         align-self: flex-start;
         background: var(--bg-card);
@@ -1062,21 +1064,23 @@
                 }
 
                 var msgEl = appendMessage('assistant', '');
+                var revealed = '';
                 var words = pendingText.split(/(\s+)/);
                 var wordIndex = 0;
 
                 function revealNextWord() {
                     if (wordIndex >= words.length) {
+                        formatMessage(msgEl, pendingText);
                         setStreaming(false);
                         return;
                     }
-                    // Add 2-4 words at a time for natural pacing
                     var chunk = '';
                     var count = Math.floor(Math.random() * 3) + 2;
                     for (var w = 0; w < count && wordIndex < words.length; w++) {
                         chunk += words[wordIndex++];
                     }
-                    msgEl.textContent += chunk;
+                    revealed += chunk;
+                    formatMessage(msgEl, revealed);
                     scrollToBottom();
                     setTimeout(revealNextWord, 30 + Math.random() * 40);
                 }
@@ -1089,10 +1093,28 @@
         });
     }
 
+    function formatMessage(div, text) {
+        // Clear existing content
+        div.innerHTML = '';
+        if (!text) return;
+        // Split on double newlines for paragraphs
+        var paragraphs = text.split(/\n\n+/);
+        for (var i = 0; i < paragraphs.length; i++) {
+            var p = document.createElement('p');
+            // Handle single newlines as <br> within a paragraph
+            var parts = paragraphs[i].trim().split(/\n/);
+            for (var j = 0; j < parts.length; j++) {
+                if (j > 0) p.appendChild(document.createElement('br'));
+                p.appendChild(document.createTextNode(parts[j]));
+            }
+            div.appendChild(p);
+        }
+    }
+
     function appendMessage(role, text) {
         var div = document.createElement('div');
         div.className = 'chat-msg ' + role;
-        div.textContent = text;
+        if (text) formatMessage(div, text);
         messagesEl.insertBefore(div, typingEl);
         scrollToBottom();
         return div;
