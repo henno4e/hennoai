@@ -6,7 +6,10 @@ export default {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
     const allowedOrigins = env.ALLOWED_ORIGINS.split(",");
-    const corsOrigin = allowedOrigins.includes(origin) ? origin : "";
+    const isAllowed =
+      allowedOrigins.includes(origin) ||
+      /^https:\/\/hennoai[^.]*\.vercel\.app$/.test(origin);
+    const corsOrigin = isAllowed ? origin : "";
 
     const corsHeaders: Record<string, string> = {
       "Access-Control-Allow-Origin": corsOrigin,

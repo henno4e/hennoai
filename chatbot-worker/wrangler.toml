@@ -7,5 +7,5 @@ binding = "CHAT_SESSIONS"
 id = "73cec9baea8c42148b37b0a6895d33f2"
 
 [vars]
-ALLOWED_ORIGINS = "https://henno.ai,http://localhost:8080"
+ALLOWED_ORIGINS = "https://henno.ai,https://www.henno.ai,https://hennoai.vercel.app,http://localhost:8080"
 CALCOM_EVENT_TYPE_ID = "4867177"
