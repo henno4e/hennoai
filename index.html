@@ -977,13 +977,17 @@
             localStorage.setItem('henno_chat_session', sessionId);
         }
 
+        // Collect full response, then reveal with typing effect
+        var pendingText = '';
+        var pendingEvents = [];
+        var streamDone = false;
+
         fetch(CHAT_API_URL + '/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sessionId: sessionId, message: text }),
         })
         .then(function(res) {
-            // Check for new session ID from server
             var newSessionId = res.headers.get('X-Session-Id');
             if (newSessionId && newSessionId !== sessionId) {
                 sessionId = newSessionId;
@@ -996,13 +1000,12 @@
 
             var reader = res.body.getReader();
             var decoder = new TextDecoder();
-            var currentAssistantMsg = null;
             var buffer = '';
 
             function processStream() {
                 return reader.read().then(function(result) {
                     if (result.done) {
-                        setStreaming(false);
+                        streamDone = true;
                         return;
                     }
 
@@ -1022,20 +1025,11 @@
                         } catch(e) { continue; }
 
                         if (event.type === 'chunk') {
-                            if (!currentAssistantMsg) {
-                                currentAssistantMsg = appendMessage('assistant', '');
-                            }
-                            currentAssistantMsg.textContent += event.text;
-                            scrollToBottom();
-                        } else if (event.type === 'slots') {
-                            renderSlots(event.slots);
-                        } else if (event.type === 'booked') {
-                            renderBookedCard(event);
-                        } else if (event.type === 'error') {
-                            var msg = event.message || 'Something went wrong.';
-                            appendMessage('assistant', msg + ' Book directly: ' + (event.fallbackUrl || CALCOM_FALLBACK));
+                            pendingText += event.text;
                         } else if (event.type === 'done') {
-                            currentAssistantMsg = null;
+                            streamDone = true;
+                        } else {
+                            pendingEvents.push(event);
                         }
                     }
 
@@ -1043,7 +1037,51 @@
                 });
             }
 
-            return processStream();
+            return processStream().then(function() {
+                // Show typing dots for a natural pause (800-1400ms)
+                var typingDelay = Math.min(800 + pendingText.length * 8, 1400);
+                return new Promise(function(resolve) { setTimeout(resolve, typingDelay); });
+            }).then(function() {
+                // Hide typing, show message with word-by-word reveal
+                typingEl.classList.remove('visible');
+
+                // Render non-text events (slots, booked, errors)
+                for (var i = 0; i < pendingEvents.length; i++) {
+                    var ev = pendingEvents[i];
+                    if (ev.type === 'slots') renderSlots(ev.slots);
+                    else if (ev.type === 'booked') renderBookedCard(ev);
+                    else if (ev.type === 'error') {
+                        var msg = ev.message || 'Something went wrong.';
+                        appendMessage('assistant', msg + ' Book directly: ' + (ev.fallbackUrl || CALCOM_FALLBACK));
+                    }
+                }
+
+                if (!pendingText) {
+                    setStreaming(false);
+                    return;
+                }
+
+                var msgEl = appendMessage('assistant', '');
+                var words = pendingText.split(/(\s+)/);
+                var wordIndex = 0;
+
+                function revealNextWord() {
+                    if (wordIndex >= words.length) {
+                        setStreaming(false);
+                        return;
+                    }
+                    // Add 2-4 words at a time for natural pacing
+                    var chunk = '';
+                    var count = Math.floor(Math.random() * 3) + 2;
+                    for (var w = 0; w < count && wordIndex < words.length; w++) {
+                        chunk += words[wordIndex++];
+                    }
+                    msgEl.textContent += chunk;
+                    scrollToBottom();
+                    setTimeout(revealNextWord, 30 + Math.random() * 40);
+                }
+                revealNextWord();
+            });
         })
         .catch(function() {
             appendMessage('assistant', 'Chat is temporarily unavailable. You can book directly at: ' + CALCOM_FALLBACK);
