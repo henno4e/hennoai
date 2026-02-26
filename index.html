@@ -1054,7 +1054,7 @@
                     else if (ev.type === 'booked') renderBookedCard(ev);
                     else if (ev.type === 'error') {
                         var msg = ev.message || 'Something went wrong.';
-                        appendMessage('assistant', msg + ' Book directly: ' + (ev.fallbackUrl || CALCOM_FALLBACK));
+                        appendFallback(msg);
                     }
                 }
 
@@ -1088,7 +1088,7 @@
             });
         })
         .catch(function() {
-            appendMessage('assistant', 'Chat is temporarily unavailable. You can book directly at: ' + CALCOM_FALLBACK);
+            appendFallback('Chat is temporarily unavailable.');
             setStreaming(false);
         });
     }
@@ -1118,6 +1118,23 @@
         messagesEl.insertBefore(div, typingEl);
         scrollToBottom();
         return div;
+    }
+
+    function appendFallback(msg) {
+        var div = document.createElement('div');
+        div.className = 'chat-msg assistant';
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode(msg + ' Book directly: '));
+        var a = document.createElement('a');
+        a.href = CALCOM_FALLBACK;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = CALCOM_FALLBACK;
+        a.style.cssText = 'color:var(--accent);text-decoration:underline;word-break:break-all;';
+        p.appendChild(a);
+        div.appendChild(p);
+        messagesEl.insertBefore(div, typingEl);
+        scrollToBottom();
     }
 
     function renderSlots(slots) {
