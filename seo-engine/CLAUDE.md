@@ -88,10 +88,10 @@ The `/publish` command:
 2. Generates `../<slug>.html` using the site's article template
 3. Updates `../sitemap.xml` with new entry
 4. Updates `../rss.xml` with new item
-3.5. Updates `../llms.txt` with new article entry
-5. Updates `../blog/index.html` with post card
-6. Git commits all changes
-7. Deploys via `vercel --prod` from parent directory
+5. Updates `../llms.txt` with new article entry
+6. Updates `../blog/index.html` with post card
+7. Git commits all changes
+8. Deploys via `vercel --prod` from parent directory
 
 ## Quality Gate
 
