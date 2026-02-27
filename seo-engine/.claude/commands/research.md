@@ -161,6 +161,8 @@ Identify 4–6 FAQ candidates from SERP gaps, Reddit questions, and AI response 
 2. [Question]
 3. [Question]
 4. [Question]
+5. [Question]
+6. [Question]
 
 ### Target Metrics
 - Word count: [X] words
