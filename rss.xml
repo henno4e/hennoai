@@ -6,8 +6,15 @@
     <description>AI automation insights and guides for small businesses. Learn how to save time, cut costs, and grow with practical automation strategies.</description>
     <language>en</language>
     <managingEditor>hello@henno.ai (Henno)</managingEditor>
-    <lastBuildDate>Thu, 26 Feb 2026 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 27 Feb 2026 00:00:00 +0200</lastBuildDate>
     <atom:link href="https://henno.ai/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hiring vs automating with AI: a cost comparison for small businesses</title>
+      <link>https://henno.ai/hiring-vs-automating-ai-small-business.html</link>
+      <guid isPermaLink="true">https://henno.ai/hiring-vs-automating-ai-small-business.html</guid>
+      <pubDate>Fri, 27 Feb 2026 00:00:00 +0200</pubDate>
+      <description>Should you hire your next team member or automate the work instead? A practical cost comparison in Rands, with a framework for getting the sequence right.</description>
+    </item>
     <item>
       <title>AI automation for real estate agencies: a practical guide to getting started</title>
       <link>https://henno.ai/ai-automation-real-estate-agencies.html</link>

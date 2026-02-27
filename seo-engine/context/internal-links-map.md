@@ -14,6 +14,7 @@
 <!-- | [Title] | https://henno.ai/[slug].html | "[anchor 1]", "[anchor 2]" | -->
 
 | AI automation for real estate agencies: a practical guide to getting started | https://henno.ai/ai-automation-real-estate-agencies.html | "AI automation for real estate agencies", "automate your real estate agency", "real estate AI guide" |
+| Hiring vs automating with AI: a cost comparison for small businesses | https://henno.ai/hiring-vs-automating-ai-small-business.html | "hiring vs automating with AI", "cost comparison of hiring vs automation", "should I hire or automate" |
 
 ## Linking Strategy
 
