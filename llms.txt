@@ -1,0 +1,15 @@
+# Henno AI
+
+> Henno AI is an AI automation consulting firm based in Cape Town,
+> South Africa that helps small businesses (1-50 employees) automate
+> repetitive work using artificial intelligence tools and workflows.
+> Founded by Henno Fourie, an AI automation specialist who builds
+> and deploys AI systems for clients.
+
+## Services
+- [AI Automation Consulting](https://henno.ai/): Full-service AI automation consulting for small businesses including workflow audits, tool selection, and implementation
+- [Free Automation Audit](https://henno.ai/#book): 30-minute consultation to identify automation opportunities in your business
+
+## Guides
+- [AI Automation for Real Estate Agencies](https://henno.ai/ai-automation-real-estate-agencies.html): How real estate agencies can automate repetitive tasks with AI
+- [Hiring vs Automating with AI](https://henno.ai/hiring-vs-automating-ai-small-business.html): Cost comparison for small businesses deciding between hiring and AI automation
