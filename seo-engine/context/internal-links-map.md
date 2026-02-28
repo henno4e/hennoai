@@ -15,6 +15,7 @@
 
 | AI automation for real estate agencies: a practical guide to getting started | https://henno.ai/ai-automation-real-estate-agencies.html | "AI automation for real estate agencies", "automate your real estate agency", "real estate AI guide" |
 | Hiring vs automating with AI: a cost comparison for small businesses | https://henno.ai/hiring-vs-automating-ai-small-business.html | "hiring vs automating with AI", "cost comparison of hiring vs automation", "should I hire or automate" |
+| How to set up a 24/7 AI WhatsApp agent for your business | https://henno.ai/whatsapp-ai-agent-business.html | "WhatsApp AI chatbot for business", "set up WhatsApp chatbot", "WhatsApp AI agent" |
 
 ## Linking Strategy
 

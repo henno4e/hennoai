@@ -6,8 +6,15 @@
     <description>AI automation insights and guides for small businesses. Learn how to save time, cut costs, and grow with practical automation strategies.</description>
     <language>en</language>
     <managingEditor>hello@henno.ai (Henno)</managingEditor>
-    <lastBuildDate>Fri, 27 Feb 2026 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 28 Feb 2026 00:00:00 +0200</lastBuildDate>
     <atom:link href="https://henno.ai/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to set up a 24/7 AI WhatsApp agent for your business</title>
+      <link>https://henno.ai/whatsapp-ai-agent-business.html</link>
+      <guid isPermaLink="true">https://henno.ai/whatsapp-ai-agent-business.html</guid>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 +0200</pubDate>
+      <description>Three ways to set up a WhatsApp AI chatbot for your business, with honest costs in Rands, the truth about OpenClaw, and what the 2026 policy change means.</description>
+    </item>
     <item>
       <title>Hiring vs automating with AI: a cost comparison for small businesses</title>
       <link>https://henno.ai/hiring-vs-automating-ai-small-business.html</link>

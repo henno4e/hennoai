@@ -13,3 +13,4 @@
 ## Guides
 - [AI Automation for Real Estate Agencies](https://henno.ai/ai-automation-real-estate-agencies.html): How real estate agencies can automate repetitive tasks with AI
 - [Hiring vs Automating with AI](https://henno.ai/hiring-vs-automating-ai-small-business.html): Cost comparison for small businesses deciding between hiring and AI automation
+- [How to Set Up a 24/7 AI WhatsApp Agent](https://henno.ai/whatsapp-ai-agent-business.html): Three ways to set up a WhatsApp AI chatbot for your business, with honest costs in Rands, the truth about OpenClaw, and what the 2026 policy change means
